@@ -1,32 +1,81 @@
-# Time-series-analysis
------
+# Time Seriers Analysis
+Time Series Forecasting and Linear Regression Modeling analysis for Japanese Yen
+![yen](images/dollar-yen.jpg)
 
 
-#### Time-Series Forecasting
+## Background
+
+The financial departments of large companies often deal with foreign currency transactions while doing international business. As a result, they are always looking for anything that can help them better understand the future direction and risk of various currencies. Hedge funds, too, are keenly interested in anything that will give them a consistent edge in predicting currency movements.
 
 
-Question: Based on your time series analysis, would you buy the yen now?
+### Time-Series Forecasting
 
-Answer:  I will not buy the yen now.
+loaded historical Dollar-Yen exchange rate futures data and ploted Yen futures settle prices.
 
----
+![plot](images/yen-futures-settle-prices.png)
 
 
-Question: Is the risk of the yen expected to increase or decrease?
 
-Answer:  From ARIMA Model Results, I can see all the p- values are higher than the 0.05, and the 5 Day Forecast Volatility plot shows a volatility increase trend. These all indicate the increased risk.
+#### Using a Hodrick-Prescott Filter, decomposed the Settle price into a trend and noise. and ploted settle Vs trend 
 
----
+![settle vs trend](images/settle-vs-trend.png)
 
-Question: Based on the model evaluation, would you feel confident in using these models for trading?
 
-Answer:  These models are good models for evaluation. However, I don't feel confident in using them for trading due to the data is not enough for me to make a decision. And the P-value in the ARIMA Model Results is all higher than 0.05; the analysis results show me more risk to trading.
+#### Using futures Settle *Returns*, estimated an ARMA model using Sklearn.
 
---------
+![arma](images/arma-model.png)
+
+#### Plot for 5 Day Returns Forecast from ARMA model
+
+![aram-forecast](images/5-day-return-forecast.png)
+
+
+#### Question: Based on the p-value, is the model a good fit?
+
+
+Answer: Based on the model summary table, none of the p-values are below 0.05, which suggests that we may need to add additional input variables or adjust the lag order.
+
+Assuming we were confident with this model's ability to predict, however, our model-based forecast for the next 5 days is of positive returns for the Yen.
+
+
+### Forecasting the Settle Price using an ARIMA Model
+
+Using the *raw* Yen **Settle Price**, estimated an ARIMA model.
+
+![arima-model](images/arima.png)
+
+#### Plot for 5 Day Futures Price Forecast
+
+![5 forecast](images/5-day-futures-prive-forecast.png)
+
+
+
+# Volatility Forecasting with GARCH
+
+Using futures Settle *Returns*, estimated an GARCH model
+
+![garch](images/garch-model.png)
+
+
+
+Covariance estimator: robust
+
+Note, our p-values for GARCH and volatility forecasts tend to be much lower than our ARMA/ARIMA return and price forecasts. In particular, here we have all p-values of less than 0.05, except for alpha(2), indicating overall a much better model performance.
+
+
+
 
 #### Linear Regression Forecasting
 
-Question: Does this model perform better or worse on out-of-sample data as compared to in-sample data?
+1. built a SKLearn linear regression model to predict Yen futures ("settle") returns with *lagged* Yen futures returns. 
+2. Fitting a Linear Regression Model.
+3. Making predictions using the testing data.
+4. Out-of-sample performance.
+5. In-sample performance.
 
-Answer: The model perform slightly better on out-of-sample data compared to in-sample data. Because Out-of-Sample Root Mean Squared Error is 0.64 which is lower than In-sample Root Mean Squared Error 0.84
+
+#### The first 20 predictions vs the true values
+![regression](images/reg.png)
+
+## Please check *conclusions.md* to read the full Analysis
 
